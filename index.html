@@ -25,6 +25,10 @@
             max-width: 400px;
             width: 100%;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         /* Judul halaman */
@@ -34,16 +38,17 @@
             color: #333;
         }
 
-        /* Styling input agar lebih rapi dan tengah */
+        /* Styling input agar lebih rapi dan center */
         input {
-            width: calc(100% - 24px);
+            width: 100%;
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-size: 16px;
             border: 2px solid #ccc;
             border-radius: 8px;
             transition: border-color 0.3s;
             text-align: center;
+            max-width: 350px;
         }
 
         /* Efek ketika input fokus */
@@ -52,20 +57,48 @@
             outline: none;
         }
 
-        /* Tampilan hasil terbilang */
-        .result {
-            margin-top: 20px;
-            font-size: 20px;
+        /* Kolom hasil yang terpusat dan mendukung multiline */
+        .result-box {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            background-color: #f1f1f1;
+            margin-top: 10px;
             font-weight: bold;
             color: #007BFF;
             text-align: center;
-            min-height: 30px;
+            display: block;
+            resize: none;
+            height: auto;
+            max-width: 350px;
+            line-height: 1.4;
+            word-spacing: -0.1em;
+        }
+
+        /* Tombol salin */
+        .copy-btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        /* Hover efek tombol salin */
+        .copy-btn:hover {
+            background-color: #0056b3;
         }
 
         /* Footer di bawah */
         .footer {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 15px;
             font-size: 12px;
             color: #777;
         }
@@ -75,64 +108,97 @@
     <div class="container">
         <h1>Konversi Angka ke Terbilang</h1>
         <input type="text" id="inputNumber" placeholder="Masukkan angka" />
-        <div class="result" id="result">Hasil terbilang akan muncul di sini</div>
+        <!-- Kolom hasil tambahan dengan textarea -->
+        <textarea id="result-box" class="result-box" readonly>Hasil terbilang akan muncul di sini</textarea>
+        <!-- Tombol Copy -->
+        <button class="copy-btn" id="copyBtn">Salin Hasil</button>
         <div class="footer">
             © 2024 Terbilang Converter
         </div>
     </div>
 
     <script>
-        const units = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
+        const units = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
         
         function toTerbilang(n) {
             if (n < 12) {
                 return units[n];
             } else if (n < 20) {
-                return toTerbilang(n - 10) + " belas";
+                return toTerbilang(n - 10) + " Belas";
             } else if (n < 100) {
-                return toTerbilang(Math.floor(n / 10)) + " puluh " + toTerbilang(n % 10);
+                return toTerbilang(Math.floor(n / 10)) + " Puluh" + (n % 10 > 0 ? " " + toTerbilang(n % 10) : "");
             } else if (n < 200) {
-                return "seratus " + toTerbilang(n - 100);
+                return "Seratus" + (n % 100 > 0 ? " " + toTerbilang(n - 100) : "");
             } else if (n < 1000) {
-                return toTerbilang(Math.floor(n / 100)) + " ratus " + toTerbilang(n % 100);
+                return toTerbilang(Math.floor(n / 100)) + " Ratus" + (n % 100 > 0 ? " " + toTerbilang(n % 100) : "");
             } else if (n < 2000) {
-                return "seribu " + toTerbilang(n - 1000);
+                return "Seribu" + (n % 1000 > 0 ? " " + toTerbilang(n - 1000) : "");
             } else if (n < 1000000) {
-                return toTerbilang(Math.floor(n / 1000)) + " ribu " + toTerbilang(n % 1000);
+                return toTerbilang(Math.floor(n / 1000)) + " Ribu" + (n % 1000 > 0 ? " " + toTerbilang(n % 1000) : "");
             } else if (n < 1000000000) {
-                return toTerbilang(Math.floor(n / 1000000)) + " juta " + toTerbilang(n % 1000000);
+                return toTerbilang(Math.floor(n / 1000000)) + " Juta" + (n % 1000000 > 0 ? " " + toTerbilang(n % 1000000) : "");
             } else if (n < 1000000000000) {
-                return toTerbilang(Math.floor(n / 1000000000)) + " miliar " + toTerbilang(n % 1000000000);
+                return toTerbilang(Math.floor(n / 1000000000)) + " Miliar" + (n % 1000000000 > 0 ? " " + toTerbilang(n % 1000000000) : "");
             } else if (n < 1000000000000000) {
-                return toTerbilang(Math.floor(n / 1000000000000)) + " triliun " + toTerbilang(n % 1000000000000);
+                return toTerbilang(Math.floor(n / 1000000000000)) + " Triliun" + (n % 1000000000000 > 0 ? " " + toTerbilang(n % 1000000000000) : "");
             } else {
-                return "Angka terlalu besar";
+                return "Angka Terlalu Besar";
             }
         }
 
         function formatNumberWithDots(num) {
-            const cleanedNum = num.replace(/\./g, '');
+            const cleanedNum = num.replace(/\D/g, ''); // Hanya simpan angka
             return cleanedNum.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
         function convertToTerbilang() {
             const inputNumber = document.getElementById('inputNumber').value;
-            const resultDiv = document.getElementById('result');
+            const resultBox = document.getElementById('result-box');
             
-            const cleanedNumber = inputNumber.replace(/\./g, '');
+            const cleanedNumber = inputNumber.replace(/[^0-9]/g, '');
 
             if (cleanedNumber === "" || isNaN(cleanedNumber)) {
-                resultDiv.innerHTML = "Silakan masukkan angka yang valid!";
+                resultBox.value = "Hasil terbilang akan muncul di sini";
             } else {
-                const terbilangResult = toTerbilang(parseInt(cleanedNumber));
-                resultDiv.innerHTML = terbilangResult.charAt(0).toUpperCase() + terbilangResult.slice(1) + " rupiah";
+                const terbilangResult = toTerbilang(parseInt(cleanedNumber)).trim(); // Menghapus spasi di awal/akhir
+                resultBox.value = `${terbilangResult} Rupiah`; // Menghindari spasi berlebih
             }
         }
 
         document.getElementById("inputNumber").addEventListener("input", function() {
             const inputField = document.getElementById('inputNumber');
-            inputField.value = formatNumberWithDots(inputField.value); 
-            convertToTerbilang(); 
+            let value = inputField.value.trim();
+
+            // Hapus awalan "Rp" jika input kosong
+            if (value === "") {
+                inputField.value = "";
+                document.getElementById('result-box').value = "Hasil terbilang akan muncul di sini"; // Reset hasil terbilang
+                return;
+            }
+
+            // Hapus "Rp" jika ada dan format ulang angka
+            if (value.startsWith("Rp")) {
+                value = value.replace(/^Rp\s?/, '');
+            }
+
+            // Format angka
+            const formattedValue = formatNumberWithDots(value);
+
+            // Tambahkan "Rp" di depan hanya jika ada angka yang diinput
+            inputField.value = formattedValue ? `Rp ${formattedValue}` : "";
+
+            // Update hasil terbilang
+            convertToTerbilang();
+        });
+
+        // Fungsi untuk menyalin hasil ke clipboard
+        document.getElementById("copyBtn").addEventListener("click", function() {
+            const resultBox = document.getElementById("result-box");
+            resultBox.select();
+            document.execCommand("copy");
+
+            // Memberikan feedback bahwa teks berhasil disalin
+            alert("Hasil telah disalin: " + resultBox.value);
         });
     </script>
 </body>
