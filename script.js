@@ -26,6 +26,16 @@ const angkaKeKata = (angka) => {
     }
 };
 
+else if (angka < 1000) {
+    let ratus = ratusan[Math.floor(angka / 100)];
+    let sisa = angka % 100;
+    if (sisa === 0) {
+        return ratus + ' ratus';
+    } else {
+        return ratus + ' ratus ' + angkaKeKata(sisa);
+    }
+}
+
 const rupiahKeKata = (angka) => {
     const integer = Math.floor(angka);
     const decimal = Math.round((angka - integer) * 100);
