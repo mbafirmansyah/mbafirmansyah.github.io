@@ -26,15 +26,24 @@ const angkaKeKata = (angka) => {
     }
 };
 
-else if (angka < 1000) {
-    let ratus = ratusan[Math.floor(angka / 100)];
-    let sisa = angka % 100;
-    if (sisa === 0) {
-        return ratus + ' ratus';
+const angkaKeKata = (angka) => {
+    // ...
+    if (angka < 10) {
+        return satuan[angka];
+    } else if (angka < 20) {
+        return belasan[angka - 10];
+    } else if (angka < 100) {
+        return puluhan[Math.floor(angka / 10)] + (angka % 10 !== 0 ? ' ' + satuan[angka % 10] : '');
+    } else if (angka < 1000) {
+        return ratusan[Math.floor(angka / 100)] + ' ratus' + (angka % 100 !== 0 ? ' ' + angkaKeKata(angka % 100) : '');
+    } else if (angka < 1000000) {
+        return angkaKeKata(Math.floor(angka / 1000)) + ' ribu' + (angka % 1000 !== 0 ? ' ' + angkaKeKata(angka % 1000) : '');
+    } else if (angka < 1000000000) {
+        return angkaKeKata(Math.floor(angka / 1000000)) + ' juta' + (angka % 1000000 !== 0 ? ' ' + angkaKeKata(angka % 1000000) : '');
     } else {
-        return ratus + ' ratus ' + angkaKeKata(sisa);
+        return angkaKeKata(Math.floor(angka / 1000000000)) + ' milyar' + (angka % 1000000000 !== 0 ? ' ' + angkaKeKata(angka % 1000000000) : '');
     }
-}
+};
 
 const rupiahKeKata = (angka) => {
     const integer = Math.floor(angka);
