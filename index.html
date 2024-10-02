@@ -1,46 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Konversi Angka ke Kata-kata</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terbilang Angka</title>
     <style>
+        /* Atur tampilan dasar halaman */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        #angka {
-            width: 200px;
-            height: 30px;
-            font-size: 18px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+
+        /* Kontainer utama yang memegang input dan hasil */
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
         }
-        #konversi {
-            width: 100px;
-            height: 30px;
-            font-size: 18px;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: #fff;
-            cursor: pointer;
-        }
-        #konversi:hover {
-            background-color: #3e8e41;
-        }
-        #hasil {
+
+        /* Judul halaman */
+        h1 {
             font-size: 24px;
-            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Styling input agar lebih rapi dan tengah */
+        input {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+            text-align: center;
+        }
+
+        /* Efek ketika input fokus */
+        input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        /* Tampilan hasil terbilang */
+        .result {
             margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #007BFF;
+            text-align: center;
+            min-height: 30px;
+        }
+
+        /* Footer di bawah */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
         }
     </style>
 </head>
 <body>
-    <h1>Konversi Angka ke Kata-kata</h1>
-    <input type="number" id="angka" placeholder="Masukkan angka">
-    <button id="konversi">Konversi</button>
-    <p id="hasil"></p>
+    <div class="container">
+        <h1>Konversi Angka ke Terbilang</h1>
+        <input type="text" id="inputNumber" placeholder="Masukkan angka" />
+        <div class="result" id="result">Hasil terbilang akan muncul di sini</div>
+        <div class="footer">
+            © 2024 Terbilang Converter
+        </div>
+    </div>
 
-    <script src="script.js"></script>
+    <script>
+        const units = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
+        
+        function toTerbilang(n) {
+            if (n < 12) {
+                return units[n];
+            } else if (n < 20) {
+                return toTerbilang(n - 10) + " belas";
+            } else if (n < 100) {
+                return toTerbilang(Math.floor(n / 10)) + " puluh " + toTerbilang(n % 10);
+            } else if (n < 200) {
+                return "seratus " + toTerbilang(n - 100);
+            } else if (n < 1000) {
+                return toTerbilang(Math.floor(n / 100)) + " ratus " + toTerbilang(n % 100);
+            } else if (n < 2000) {
+                return "seribu " + toTerbilang(n - 1000);
+            } else if (n < 1000000) {
+                return toTerbilang(Math.floor(n / 1000)) + " ribu " + toTerbilang(n % 1000);
+            } else if (n < 1000000000) {
+                return toTerbilang(Math.floor(n / 1000000)) + " juta " + toTerbilang(n % 1000000);
+            } else if (n < 1000000000000) {
+                return toTerbilang(Math.floor(n / 1000000000)) + " miliar " + toTerbilang(n % 1000000000);
+            } else if (n < 1000000000000000) {
+                return toTerbilang(Math.floor(n / 1000000000000)) + " triliun " + toTerbilang(n % 1000000000000);
+            } else {
+                return "Angka terlalu besar";
+            }
+        }
+
+        function formatNumberWithDots(num) {
+            const cleanedNum = num.replace(/\./g, '');
+            return cleanedNum.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function convertToTerbilang() {
+            const inputNumber = document.getElementById('inputNumber').value;
+            const resultDiv = document.getElementById('result');
+            
+            const cleanedNumber = inputNumber.replace(/\./g, '');
+
+            if (cleanedNumber === "" || isNaN(cleanedNumber)) {
+                resultDiv.innerHTML = "Silakan masukkan angka yang valid!";
+            } else {
+                const terbilangResult = toTerbilang(parseInt(cleanedNumber));
+                resultDiv.innerHTML = terbilangResult.charAt(0).toUpperCase() + terbilangResult.slice(1) + " rupiah";
+            }
+        }
+
+        document.getElementById("inputNumber").addEventListener("input", function() {
+            const inputField = document.getElementById('inputNumber');
+            inputField.value = formatNumberWithDots(inputField.value); 
+            convertToTerbilang(); 
+        });
+    </script>
 </body>
 </html>
